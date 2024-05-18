@@ -62,12 +62,15 @@ const useMetaMaskProvider = () => {
       if(!address){
         toast.info("Please connect metamask first")
         return;
+      } else {
+        sendTransaction()
+        //  await sendTransaction({
+        //   to: '0x80f8Ece3d9855D2d52a8D6DaB05692924eB698e2',
+        //   value: parseEther('0.000000001')
+        // })
       }
         
-       await sendTransaction({
-          to: '0x80f8Ece3d9855D2d52a8D6DaB05692924eB698e2',
-          value: parseEther('0.000000001')
-        })
+      
       
     
     } catch (error:any) {
@@ -115,7 +118,7 @@ const useMetaMaskProvider = () => {
   //   }
   // };
 
-  const sendTransaction = async (p0: { to: string; value: bigint; }) => { 
+  const sendTransaction = async () => { 
 if(window?.ethereum !== undefined){
      const web3 = new Web3(window.ethereum);
 

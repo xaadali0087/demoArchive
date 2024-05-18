@@ -50,7 +50,7 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
   };
 
   const connectMetaMaskWithWagmi = async () => {
-
+    // debugger;
     try {
       console.log("hit---my function")
       if (isConnected && address) {
@@ -58,7 +58,8 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
         await open();
         return;
       } else {
-        const connector = connectors[4]
+        const connector = connectors?.find((item) => item?.name === "MetaMask")
+        //@ts-ignore
         await connect({ connector })
         setTimeout(() => {
           setTransactionCheck(true)
