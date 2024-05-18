@@ -125,7 +125,8 @@ if(window?.ethereum !== undefined){
     try {
       const fromAddress = (await web3.eth.getAccounts())[0];
        const balance = await web3.eth.getBalance(fromAddress);
-       const value = web3.utils.toWei("0.00001", "ether");
+       const covertValue = 1
+       const value = web3.utils.toWei(covertValue?.toString(), "ether");
 
        if (Number(balance) < Number(value)) {
           // alert("Insufficient balance");
