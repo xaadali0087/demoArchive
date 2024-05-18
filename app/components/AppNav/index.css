@@ -1,0 +1,12 @@
+.navContainer{
+    margin: 0 70px;
+}
+
+@media (max-width: 992px) {
+    .navContainer{
+        margin: 0 32px;
+    }}
+@media (max-width: 640px) {
+    .navContainer{
+        margin: 0 17px;
+    }}

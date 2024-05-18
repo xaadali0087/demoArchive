@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-arial: Arial, sans-serif;
+}
+
+/* 
+.gradient-border {
+  border-image: linear-gradient(to right, #ff416c, #ff4a30) 1;
+  border-style: solid;
+  border-width: 2px; 
+} */
+
+.primary-stroke-text {
+  -webkit-text-stroke: 1px #ff4650;
+}
+
+.gray-stroke-text {
+  -webkit-text-stroke: 1px #e0e0e0;
+}
+
+/* Style for radio button when not checked */
+
+input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+}
+
+input[type="radio"]:checked::before {
+  content: "";
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff4650;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+input[type="radio"]:checked::after {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid #ff4650;
+  position: absolute;
+  top: -2px;
+  left: -2px;
+}
+
+/* Optional: Improve browser compatibility  */
+input[type="radio"]::-moz-radio-button {
+  /* Target Firefox  */
+  appearance: none;
+}
+
+ input[type="checkbox"] {
+  -webkit-appearance: initial;
+  appearance: initial;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  border: none;
+  background: white;
+  position: relative;
+  border: 2px solid #a3a3a3;
+  border-radius: 6px;
+  cursor: pointer;
+}
+input[type="checkbox"]:checked {
+  background: #ff416c;
+  border-color: #ff416c;
+}
+input[type="checkbox"]:checked:after {
+  content: url("../public/checkbox-tick.svg");
+  color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+} 
+
+@media screen and (-webkit-min-device-pixel-ratio:0){ 
+  input{
+    font-size: 16px;
+  }
+}

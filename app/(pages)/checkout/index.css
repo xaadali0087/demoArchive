@@ -1,0 +1,11 @@
+.paymentRadio[type="radio"]:checked::after {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #E0E0E0; 
+    position: absolute;
+    top: -2px;
+    left: -2px;
+} 
