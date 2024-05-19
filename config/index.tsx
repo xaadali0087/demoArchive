@@ -1,7 +1,7 @@
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
-import { cookieStorage, createStorage } from "wagmi";
-// import { mainnet, polygon, sepolia } from "wagmi/chains";
-import { polygon } from "wagmi/chains";
+import { cookieStorage, createStorage, http } from "wagmi";
+import { mainnet, polygon, sepolia } from "wagmi/chains";
+// import { polygon } from "wagmi/chains";
 
 //projectId from https://cloud.walletconnect.com
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
@@ -30,7 +30,10 @@ const metadata = {
 // })
 
 export const config = defaultWagmiConfig({
-  chains: [polygon], // required
+  chains: [sepolia], // required,
+  transports: {
+    [sepolia.id]: http()
+  },
   projectId, // required
   metadata, // required
   ssr: true,
@@ -40,6 +43,6 @@ export const config = defaultWagmiConfig({
   enableWalletConnect: true, // Optional - true by default
   enableInjected: true, // Optional - true by default
   enableEIP6963: true, // Optional - true by default
-  enableCoinbase: true, // Optional - true by default
-//   ...wagmiOptions // Optional - Override createConfig parameters
+  enableCoinbase: true, // Optional - true by default,
+  //   ...wagmiOptions // Optional - Override createConfig parameters
 })

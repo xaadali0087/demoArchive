@@ -15,6 +15,7 @@ import ReactLoading from "react-loading";
 import { useAccount, useDisconnect, useConnect } from "wagmi";
 import ProcessDialogue from "./ProcessDialogue";
 import useWalletConnectTransaction from "../Wallets/WalletConnect/components/useWalletConnectTransaction";
+import TransactionWithWagmi from "../Wallets/MetaMask/useWagmiHook";
 type CryptoDialogueProps = {
   openDialogue: boolean;
   handleClose: () => void;
@@ -27,7 +28,8 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
   const { address, isConnected } = useAccount();
   const { connectors, connect } = useConnect()
   const { walletDisconnect, transactionProceed } = useWalletConnectTransaction();
-  const { transactionLoader, sendTransaction, handleTransactionWithWagmi } = useMetaMaskProvider();
+  const { handleTransactionWithWagmi } = useMetaMaskProvider();
+  const { transactionLoader } = TransactionWithWagmi()
   const { open } = useWeb3Modal();
   const [cryptoPayment, setcryptoPayment] = useState<string>();
   const [openProcessTransaction, setOpenProcessTransaction] = useState<boolean>(false);
@@ -50,7 +52,7 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
   };
 
   const connectMetaMaskWithWagmi = async () => {
-    // debugger;
+    debugger;
     try {
       console.log("hit---my function")
       if (isConnected && address) {

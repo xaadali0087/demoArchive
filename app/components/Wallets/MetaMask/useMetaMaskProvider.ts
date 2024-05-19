@@ -6,10 +6,13 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "../../ReduxToolKit/hook";
 import { setCustomerAddress } from "../../ReduxToolKit/web3Slice";
 import { useMetaMaskDataMutation } from "../../ReduxToolKit/droneAPI";
-import { useAccount, } from 'wagmi'
+import { useAccount, useConnect} from 'wagmi'
 import { toast } from "react-toastify";
 import { useSendTransaction } from 'wagmi'
 import { parseEther } from 'viem'
+import { ethers } from "ethers";
+import WagmiHookForTesting from "./useWagmiHook";
+import TransactionWithWagmi from "./useWagmiHook";
 
 // declare global {
 //   interface Window {
@@ -35,7 +38,9 @@ interface MetaMaskProviderProps {
 }
 
 const useMetaMaskProvider = () => {
+  const{ handleTransaction } = TransactionWithWagmi()
   const { address } = useAccount();
+   const { connectors, connect } = useConnect()
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [createMetamaskData] = useMetaMaskDataMutation();
@@ -63,7 +68,16 @@ const useMetaMaskProvider = () => {
         toast.info("Please connect metamask first")
         return;
       } else {
-        sendTransaction()
+        // await sendTransaction()
+    const response = await handleTransaction()
+    if(response){
+      setTimeout(()=>{
+
+        toast.success("transaction successfully completed")
+        router.push("/checkout-successful/");  
+      },15000)
+    }
+        // sendTransaction()
         //  await sendTransaction({
         //   to: '0x80f8Ece3d9855D2d52a8D6DaB05692924eB698e2',
         //   value: parseEther('0.000000001')
@@ -75,7 +89,7 @@ const useMetaMaskProvider = () => {
     
     } catch (error:any) {
       toast.error(error?.message);
-      console.log("🚀 ~ handleTransactionWithWagmi ~ error:", error)
+      // console.log("🚀 ~ handleTransactionWithWagmi ~ error:", error)
       
     }
   }
@@ -118,73 +132,51 @@ const useMetaMaskProvider = () => {
   //   }
   // };
 
-  const sendTransaction = async () => { 
-if(window?.ethereum !== undefined){
-     const web3 = new Web3(window.ethereum);
+//   const handleSubmitResponse = async (hash:any) => { 
+   
+//     console.log("hashhhhhhhhhhhhhhhhh",hash)
+//     return;
+// if(window?.ethereum !== undefined){
+//     try {
+//       const web3 = new Web3(window.ethereum);
+//       const fromAddress = address;
+//       //@ts-ignore
+//       const balance = await web3.eth.getBalance(fromAddress);
+//       const covertValue = 0.000001
+//       const value = web3.utils.toWei(covertValue?.toString(), "ether");
 
-    try {
-      const fromAddress = (await web3.eth.getAccounts())[0];
-       const balance = await web3.eth.getBalance(fromAddress);
-       const covertValue = 0.000001
-       const value = web3.utils.toWei(covertValue?.toString(), "ether");
+//        if (Number(balance) < Number(value)) {
+//           toast.info("Insufficient balance")
+//           return;
+//         }
+//           setTransactionLoader(true);
+//           let CGU = receipt.cumulativeGasUsed.toString();
+//           let EGP = receipt.effectiveGasPrice?.toString();
+//           let GU = receipt.gasUsed.toString();
+        
+//           const sendData: MetaMaskData = {
+//             blockHash: receipt.blockHash || "",
+//             cumulativeGasUsed: CGU || "",
+//             effectiveGasPrice: EGP || "",
+//             from: receipt.from || "",
+//             gasUsed: GU || "",
+//             to: receipt.to || "",
+//             transactionHash: receipt.transactionHash || "",
+//           };
+//           setData(sendData);
+//           await createMetamaskData(sendData);
+//           setTransactionLoader(false);
+//           dispatch(setCustomerAddress(`0x${fromAddress}`));
+//           router.push("/checkout-successful/");        
+//     } catch (error:any) {
+//       const findError = error?.response?.data?.message ? error?.response?.data?.message : error?.message; 
+//       toast.error(findError);
+//       console.log("Transaction Errors and api error:", error);
+//     }
+//   }
+//   };
 
-       if (Number(balance) < Number(value)) {
-          // alert("Insufficient balance");
-          toast.info("Insufficient balance")
-          return;
-        }
-
-      const tx = {
-        from: fromAddress,
-        to: "0x80f8Ece3d9855D2d52a8D6DaB05692924eB698e2",
-        gas: 21000,
-        gasPrice: await web3.eth.getGasPrice(),
-        value: value,
-        chainId: 137,
-      };
-      await web3.eth
-        .sendTransaction(tx)
-        .on("transactionHash", (hash) => {
-          console.log("Transaction Hash: ", hash);
-          setTransactionLoader(true);
-        })
-        .on("receipt", async (receipt) => {
-          let CGU = receipt.cumulativeGasUsed.toString();
-          let EGP = receipt.effectiveGasPrice?.toString();
-          let GU = receipt.gasUsed.toString();
-          const sendData: MetaMaskData = {
-            blockHash: receipt.blockHash || "",
-            cumulativeGasUsed: CGU || "",
-            effectiveGasPrice: EGP || "",
-            from: receipt.from || "",
-            gasUsed: GU || "",
-            to: receipt.to || "",
-            transactionHash: receipt.transactionHash || "",
-          };
-          setData(sendData);
-          try {
-            await createMetamaskData(sendData);
-            console.log("Data sent to API:", sendData);
-          } catch (error:any) {
-        toast.error(error?.message);
-      
-            console.error("Error sending data to API:", error);
-          }
-          setTransactionLoader(false);
-          dispatch(setCustomerAddress(fromAddress));
-          router.push("/checkout-successful/");
-          console.log("Transaction Receipt:", receipt);
-
-          // send this data to backend api.
-        });
-    } catch (error:any) {
-      toast.error(error?.message);
-      console.error("Transaction Errors: ", error?.message);
-    }
-  }
-  };
-
-  return { transactionLoader, sendTransaction, showError,handleTransactionWithWagmi };
+  return { showError, handleTransactionWithWagmi };
 };
 
 export default useMetaMaskProvider;
