@@ -46,7 +46,7 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
       handleClose();
       setTimeout(() => {
         setTransactionCheck(true)
-      }, 15000);
+      }, 25000);
       return;
     }
   };
@@ -65,7 +65,7 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
         await connect({ connector })
         setTimeout(() => {
           setTransactionCheck(true)
-        }, 15000);
+        }, 25000);
         return;
       }
     } catch (error) {
@@ -73,7 +73,11 @@ const CryptoDialogue: FC<CryptoDialogueProps> = ({
 
     }
   }
-
+  useEffect(() => {
+    return () => {
+      setTransactionCheck(false)
+    }
+  }, [openDialogue])
   useEffect(() => {
     transactionCheck && handleTransactionWithWagmi()
   }, [transactionCheck])
